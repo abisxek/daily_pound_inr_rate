@@ -15,16 +15,12 @@ RATE_FILE      = "last_rate.json"              # persisted between runs via git
 
 
 def fetch_rate(on_date: date) -> float:
-    """Fetch GBP→INR rate for a given date from Frankfurter (free, no key)."""
-    url = f"https://api.frankfurter.dev/v2/rates?date={on_date}&base=GBP&quotes=INR"
+    """Fetch GBP→INR rate using Frankfurter v1 API (simple dict response)."""
+    url = f"https://api.frankfurter.dev/v1/{on_date}?base=GBP&symbols=INR"
     resp = requests.get(url, timeout=10)
     resp.raise_for_status()
     data = resp.json()
-    # Handle both dict and list response formats
-    rates = data["rates"]
-    if isinstance(rates, list):
-        return next(r["value"] for r in rates if r["code"] == "INR")
-    return rates["INR"]
+    return data["rates"]["INR"]
 
 
 def load_yesterday_rate() -> float | None:
