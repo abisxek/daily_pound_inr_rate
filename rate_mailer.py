@@ -90,7 +90,8 @@ def send_email(subject: str, html_body: str):
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"]    = SENDER_EMAIL
-    msg["To"]      = RECEIVER_EMAIL
+    emails = [e.strip() for e in RECEIVER_EMAIL.split(",")]
+    msg["To"] = ", ".join(emails)
     msg.attach(MIMEText(html_body, "html"))
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
