@@ -20,7 +20,11 @@ def fetch_rate(on_date: date) -> float:
     resp = requests.get(url, timeout=10)
     resp.raise_for_status()
     data = resp.json()
-    return data["rates"]["INR"]
+    # Handle both dict and list response formats
+    rates = data["rates"]
+    if isinstance(rates, list):
+        return next(r["value"] for r in rates if r["code"] == "INR")
+    return rates["INR"]
 
 
 def load_yesterday_rate() -> float | None:
