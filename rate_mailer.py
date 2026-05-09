@@ -96,7 +96,7 @@ def send_email(subject: str, html_body: str):
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
         server.login(SENDER_EMAIL, SENDER_PASS)
-        server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, msg.as_string())
+        server.sendmail(SENDER_EMAIL, emails, msg.as_string())
     print(f"✅ Email sent: {subject}")
 
 
